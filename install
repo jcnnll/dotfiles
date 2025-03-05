@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Zsh
+ln -sf $DOTFILES/zsh/zshrc $HOME/.zshrc
+
+# Kitty
+rm -rf $HOME/.config/kitty
+ln -s $DOTFILES/kitty $HOME/.config/kitty
+
+# Tmux
+ln -sf $DOTFILES/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
+
+# Neovim
+rm -rf $HOME/.config/nvim
+ln -s $DOTFILES/nvim $HOME/.config/nvim
+
+# Scripts
+mkdir -p $HOME/.local/bin
+ln -sf $DOTFILES/scripts/t $HOME/.local/bin/t
+
