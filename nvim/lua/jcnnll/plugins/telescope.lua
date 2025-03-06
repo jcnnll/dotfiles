@@ -25,17 +25,10 @@ return {
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, {})
       vim.keymap.set('n', '<leader>sf', builtin.find_files, {})
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, {})
-      vim.keymap.set('n', '<leader>lg', builtin.live_grep, {})
+      vim.keymap.set('n', '<leader>ss', builtin.live_grep, {})
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, {})
       vim.keymap.set('n', '<leader>sr', builtin.resume, {})
       vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, {})
-
-      vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
-        }
-      end, {})
 
     end,
 }

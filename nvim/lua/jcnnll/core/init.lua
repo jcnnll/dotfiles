@@ -10,17 +10,16 @@ local yankGroup = augroup('HighlightYank', {})
 -- Highlight yanked text
 autocmd('TextYankPost', {
     group = yankGroup,
-    pattern = '*',
     callback = function()
         vim.highlight.on_yank({
-            higroup  'IncSearch',
+            higroup = 'IncSearch',
             timeout = 40,
         })
     end,
 })
 
 -- Strip whitespace from files on write
-autocmd({'BufwritePre'},{
+autocmd({ 'BufwritePre' }, {
     group = jcnnllGroup,
     pattern = '*',
     command = [[%s/\s\+$//e]],

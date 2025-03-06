@@ -28,4 +28,4 @@ vim.keymap.set('i', 'jj', '<Esc>')
 vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
 
 -- New session
-vim.keymap.set('n', '<C-t>', '<cmd>silent !tmux neww t<CR>')
+vim.keymap.set('n', '<leader>ns', '<cmd>silent !tmux neww t<CR>')
