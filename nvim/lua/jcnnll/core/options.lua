@@ -37,3 +37,5 @@ vim.opt.splitbelow = true
 vim.opt.inccommand = "split"
 
 vim.opt.confirm = true
+
+vim.o.showmode = false
