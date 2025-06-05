@@ -33,3 +33,9 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.api.nvim_set_option_value("linebreak", true, { scope = "local" })
     end,
 })
+
+vim.filetype.add({
+    pattern = {
+        ["*.tmpl"] = "tmpl",
+    },
+})

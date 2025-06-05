@@ -24,12 +24,12 @@ export HERD_PHP_83_INI_SCAN_DIR="/Users/jay/Library/Application Support/Herd/con
 # fzf
 source <(fzf --zsh)
 
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
---color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
---color=marker:#babbf1,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284 \
---color=selected-bg:#51576d \
---color=border:#414559,label:#c6d0f5"
+export FZF_DEFAULT_OPTS="
+	--color=fg:#908caa,bg:#191724,hl:#ebbcba
+	--color=fg+:#e0def4,bg+:#26233a,hl+:#ebbcba
+	--color=border:#403d52,header:#31748f,gutter:#191724
+	--color=spinner:#f6c177,info:#9ccfd8
+	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
@@ -43,4 +43,9 @@ export NVM_DIR="$HOME/.nvm"
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
+
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+
+# starship
+eval "$(starship init zsh)"
 

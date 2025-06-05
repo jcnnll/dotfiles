@@ -5,6 +5,9 @@ DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Zsh
 ln -sf $DOTFILES/zsh/zshrc $HOME/.zshrc
 
+# Starship
+ln -sf $DOTFILES/starship/starship.toml $HOME/.config/starship.toml
+
 # Kitty
 rm -rf $HOME/.config/kitty
 ln -s $DOTFILES/kitty $HOME/.config/kitty
