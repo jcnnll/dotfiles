@@ -31,7 +31,7 @@ return {
             lua = { "stylua" },
             go = { "gofmt" },
             python = { "isort", "black" },
-            -- javascript = { "prettierd", "prettier", stop_after_first = true },
+            javascript = { "prettierd", "prettier", stop_after_first = true },
         },
     },
 }
