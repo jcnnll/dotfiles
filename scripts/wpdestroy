@@ -1,0 +1,10 @@
+#!/bin/sh
+
+SITES_PATH=${HOME}/workspace/wp-sites
+
+# Navigate to sites dir
+cd ${SITES_PATH}
+
+# Destroy wp site
+/opt/homebrew/opt/php@8.0/bin/php $(which wp) valet destroy $1
+

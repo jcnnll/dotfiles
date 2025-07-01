@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# ======================= REFERENCES =================================================
+#
+# https://github.com/OxyProps/valet-wpcli-bash-scripts/blob/main/wpcreate.sh
+#
+#=====================================================================================
+
+SITES_PATH=${HOME}/workspace/wp-sites
+
+USER="admin"
+PASS="password"
+
+# Navigate to sites dir
+cd ${SITES_PATH}
+
+# Create new WP site with Valet
+/opt/homebrew/opt/php@8.0/bin/php $(which wp) valet new $1 --locale="en_US" --dbname="wp_$1" --dbuser="root" --dbpass="" --admin_user=${USER} --admin_password=${PASS} --admin_email="me@mail.com"
+
+# Navigate to site dir
+cd ${SITES_PATH}/$1
+
+# Delete themes
+wp theme delete twentytwentythree twentytwentyfour
+
+# Delete deafult WP plugins
+wp plugin delete akismet hello
+
+# Output results
+echo "${GREEN}Your new website is ready${NONE}"
+echo "${YELLOW}Front-end${NONE}: https://$1.test/"
+echo "${YELLOW}Back-end${NONE}: https://$1.test/wp-admin/"
+echo "${YELLOW}Username${NONE}: ${USER}"
+echo "${YELLOW}Password${NONE}: ${PASS}"

@@ -16,22 +16,37 @@ return {
         notify_on_error = false,
         format_on_save = function(bufnr)
             local disable_filetypes = { c = true, cpp = true }
-            local lsp_format_opt
             if disable_filetypes[vim.bo[bufnr].filetype] then
-                lsp_format_opt = "never"
+                return nil
             else
-                lsp_format_opt = "fallback"
+                return {
+                    timeout_ms = 500,
+                    lsp_format = "fallback",
+                }
             end
-            return {
-                timeout_ms = 500,
-                lsp_format = lsp_format_opt,
-            }
         end,
+        formatters = {
+            phpcbf = {
+                command = "phpcbf",
+                args = { "-q", "--standard=WordPress", "--report-json", "$FILENAME" },
+            },
+        },
         formatters_by_ft = {
-            lua = { "stylua" },
+            css = { "prettier" },
             go = { "gofmt" },
+            graphql = { "prettier" },
+            html = { "prettier" },
+            javascript = { "prettier" },
+            javascriptreact = { "prettier" },
+            json = { "prettier" },
+            liquid = { "prettier" },
+            lua = { "stylua" },
+            markdown = { "prettier" },
+            php = { "phpcbf" },
             python = { "isort", "black" },
-            javascript = { "prettierd", "prettier", stop_after_first = true },
+            typescript = { "prettir" },
+            typescriptreact = { "prettier" },
+            yaml = { "prettier" },
         },
     },
 }

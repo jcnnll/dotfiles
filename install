@@ -23,4 +23,6 @@ ln -s $DOTFILES/nvim $HOME/.config/nvim
 # Scripts
 mkdir -p $HOME/.local/bin
 ln -sf $DOTFILES/scripts/t $HOME/.local/bin/t
+ln -sf $DOTFILES/scripts/wpcreate $HOME/.local/bin/wpcreate
+ln -sf $DOTFILES/scripts/wpdestroy $HOME/.local/bin/wpdestroy
 
