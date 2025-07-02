@@ -1,0 +1,22 @@
+{
+  "require": {
+    "laravel/valet": "^4.8",
+    "squizlabs/php_codesniffer": "*",
+    "php-stubs/wordpress-globals": "^0.2.0",
+    "php-stubs/wordpress-stubs": "^6.8",
+    "php-stubs/wordpress-tests-stubs": "^6.8",
+    "php-stubs/wordpress-seo-stubs": "^20.5",
+    "php-stubs/woocommerce-stubs": "^9.9",
+    "php-stubs/acf-pro-stubs": "^6.4",
+    "php-stubs/wp-cli-stubs": "^2.12"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+    "wp-coding-standards/wpcs": "^3.1"
+  }
+}

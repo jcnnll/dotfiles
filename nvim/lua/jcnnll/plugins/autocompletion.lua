@@ -20,7 +20,10 @@ return {
             preset = "default",
         },
 
+        snippets = { preset = "luasnip" },
+
         appearance = {
+            use_nvim_cmp_as_default = true,
             nerd_font_variant = "mono",
         },
 
@@ -29,16 +32,22 @@ return {
         },
 
         sources = {
-            default = { "lsp", "path", "snippets", "lazydev" },
+            default = { "lsp", "path", "snippets", "buffer", "lazydev" },
             providers = {
                 lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
             },
         },
 
-        snippets = { preset = "luasnip" },
-
         fuzzy = { implementation = "prefer_rust_with_warning" },
 
         signature = { enabled = true },
     },
+    opts_extend = {
+        "sources.completion.enabled_providers",
+        "sources.compat",
+        "sources.default",
+    },
+    config = function(_, opts)
+        require("blink.cmp").setup(opts)
+    end,
 }

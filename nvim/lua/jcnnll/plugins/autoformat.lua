@@ -1,52 +1,54 @@
 return {
     "stevearc/conform.nvim",
+    dependencies = {
+        "williamboman/mason.nvim",
+    },
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
     keys = {
         {
             "<leader>f",
             function()
-                require("conform").format({ async = true, lsp_format = "fallback" })
+                require("conform").format({
+                    lsp_fallback = true,
+                    async = false,
+                    timeout_ms = 1000,
+                })
             end,
-            mode = "",
             desc = "[F]ormat buffer",
         },
     },
-    opts = {
-        notify_on_error = false,
-        format_on_save = function(bufnr)
-            local disable_filetypes = { c = true, cpp = true }
-            if disable_filetypes[vim.bo[bufnr].filetype] then
-                return nil
-            else
-                return {
-                    timeout_ms = 500,
-                    lsp_format = "fallback",
-                }
-            end
-        end,
-        formatters = {
-            phpcbf = {
-                command = "phpcbf",
-                args = { "-q", "--standard=WordPress", "--report-json", "$FILENAME" },
+    config = function()
+        require("conform").setup({
+            formatters = {
+                phpcbf = {
+                    command = "/Users/jay/.composer/vendor/bin/phpcbf",
+                    args = { "--standard=WordPress", "$FILENAME" },
+                },
             },
-        },
-        formatters_by_ft = {
-            css = { "prettier" },
-            go = { "gofmt" },
-            graphql = { "prettier" },
-            html = { "prettier" },
-            javascript = { "prettier" },
-            javascriptreact = { "prettier" },
-            json = { "prettier" },
-            liquid = { "prettier" },
-            lua = { "stylua" },
-            markdown = { "prettier" },
-            php = { "phpcbf" },
-            python = { "isort", "black" },
-            typescript = { "prettir" },
-            typescriptreact = { "prettier" },
-            yaml = { "prettier" },
-        },
-    },
+            formatters_by_ft = {
+
+                css = { "prettier" },
+                go = { "gofmt" },
+                graphql = { "prettier" },
+                html = { "prettier" },
+                javascript = { "prettier" },
+                javascriptreact = { "prettier" },
+                json = { "prettier" },
+                liquid = { "prettier" },
+                lua = { "stylua" },
+                markdown = { "prettier" },
+                php = { "phpcbf" },
+                python = { "isort", "black" },
+                typescript = { "prettier" },
+                typescriptreact = { "prettier" },
+                yaml = { "prettier" },
+            },
+            format_on_save = {
+                lsp_fallback = true,
+                async = false,
+                timeout_ms = 1000,
+            },
+        })
+    end,
 }

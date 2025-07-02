@@ -1,10 +1,41 @@
 #!/bin/sh
+# vim: filetype=sh
 
-SITES_PATH=${HOME}/workspace/wp-sites
+SITES_PATH="$HOME/workspace/wp-sites"
 
-# Navigate to sites dir
-cd ${SITES_PATH}
+# -------- Colors --------
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+NONE=$(tput sgr0)
 
-# Destroy wp site
-/opt/homebrew/opt/php@8.0/bin/php $(which wp) valet destroy $1
+destroy_site() {
+  local site="$1"
+  cd "$SITES_PATH" || exit 1
+  /opt/homebrew/opt/php@8.0/bin/php "$(which wp)" valet destroy "$site"
+}
 
+if [ -n "$1" ]; then
+  SITE="$1"
+else
+  # No argument passed — detect site from current path
+  CWD="$(pwd)"
+  ABS_SITES_PATH="$(realpath "$SITES_PATH")"
+  ABS_CWD="$(realpath "$CWD")"
+  PARENT_DIR="$(dirname "$ABS_CWD")"
+
+  if [ "$PARENT_DIR" = "$ABS_SITES_PATH" ]; then
+    SITE="$(basename "$ABS_CWD")"
+    cd "$ABS_SITES_PATH" || exit 1
+  else
+    echo "${RED}Error:${NONE} No site name provided."
+    echo "${RED}Error:${NONE} Not inside a valid wp-sites/SITENAME directory."
+    echo "Usage:"
+    echo "  wpdestroy <sitename>"
+    echo "  (or run inside ~/workspace/wp-sites/SITENAME with no argument)"
+    exit 1
+  fi
+fi
+
+destroy_site "$SITE"
+echo "${GREEN}✔ Site '${SITE}' destroyed.${NONE}"

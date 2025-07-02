@@ -1,4 +1,5 @@
 #!/bin/sh
+# vim: filetype=sh
 
 # ======================= REFERENCES =================================================
 #
@@ -6,29 +7,82 @@
 #
 #=====================================================================================
 
-SITES_PATH=${HOME}/workspace/wp-sites
+# -------- Config --------
+SITES_PATH="${HOME}/workspace/wp-sites"
+PHP_BIN="/opt/homebrew/opt/php@8.0/bin/php"
+DEFAULT_USER="admin"
+DEFAULT_PASS="password"
+DEFAULT_EMAIL="me@mail.com"
 
-USER="admin"
-PASS="password"
+# -------- Colors --------
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+NONE=$(tput sgr0)
 
-# Navigate to sites dir
-cd ${SITES_PATH}
+# -------- Parse Args --------
+SITE="$1"
+USER="$DEFAULT_USER"
+PASS="$DEFAULT_PASS"
+EMAIL="$DEFAULT_EMAIL"
 
-# Create new WP site with Valet
-/opt/homebrew/opt/php@8.0/bin/php $(which wp) valet new $1 --locale="en_US" --dbname="wp_$1" --dbuser="root" --dbpass="" --admin_user=${USER} --admin_password=${PASS} --admin_email="me@mail.com"
+if [ -z "$SITE" ]; then
+  echo "${RED}Error:${NONE} No site name provided."
+  echo "Usage: wpcreate <sitename>"
+  exit 1
+fi
 
-# Navigate to site dir
-cd ${SITES_PATH}/$1
+SITE_PATH="${SITES_PATH}/${SITE}"
 
-# Delete themes
-wp theme delete twentytwentythree twentytwentyfour
+# -------- Check for Existing Site --------
+if [ -d "$SITE_PATH" ]; then
+  echo "${YELLOW}Warning:${NONE} Site '${SITE}' already exists at ${SITE_PATH}."
+  exit 1
+fi
 
-# Delete deafult WP plugins
-wp plugin delete akismet hello
+# -------- Create Site --------
+cd "$SITES_PATH" || exit 1
 
-# Output results
-echo "${GREEN}Your new website is ready${NONE}"
-echo "${YELLOW}Front-end${NONE}: https://$1.test/"
-echo "${YELLOW}Back-end${NONE}: https://$1.test/wp-admin/"
+$PHP_BIN "$(which wp)" valet new "$SITE" \
+  --locale="en_US" \
+  --dbname="wp_${SITE}" \
+  --dbuser="root" \
+  --dbpass="" \
+  --admin_user="${USER}" \
+  --admin_password="${PASS}" \
+  --admin_email="${EMAIL}"
+
+cd "$SITE_PATH" || exit 1
+
+# -------- Cleanup WP Defaults --------
+wp theme delete twentytwentythree twentytwentyfour > /dev/null 2>&1
+wp plugin delete akismet hello > /dev/null 2>&1
+
+# -------- Git Setup (Local Only) --------
+cat <<EOF > .gitignore
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+*.log
+
+# Node/npm
+node_modules/
+npm-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
+
+git init > /dev/null
+git add . > /dev/null
+git commit -m "Initial commit for ${SITE}" > /dev/null
+
+# -------- Output --------
+echo
+echo "${GREEN}✔ Your new WordPress site is ready.${NONE}"
+echo "${YELLOW}Front-end${NONE}: https://${SITE}.test/"
+echo "${YELLOW}Back-end${NONE}: https://${SITE}.test/wp-admin/"
 echo "${YELLOW}Username${NONE}: ${USER}"
 echo "${YELLOW}Password${NONE}: ${PASS}"

@@ -5,6 +5,9 @@ DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Zsh
 ln -sf $DOTFILES/zsh/zshrc $HOME/.zshrc
 
+# Composer
+ln -sf $DOTFILES/composer/composer.json $HOME/.composer/composer.json
+
 # Starship
 ln -sf $DOTFILES/starship/starship.toml $HOME/.config/starship.toml
 
@@ -25,4 +28,6 @@ mkdir -p $HOME/.local/bin
 ln -sf $DOTFILES/scripts/t $HOME/.local/bin/t
 ln -sf $DOTFILES/scripts/wpcreate $HOME/.local/bin/wpcreate
 ln -sf $DOTFILES/scripts/wpdestroy $HOME/.local/bin/wpdestroy
+ln -sf $DOTFILES/scripts/setsecret $HOME/.local/bin/setsecret
+ln -sf $DOTFILES/scripts/getsecret $HOME/.local/bin/getsecret
 
