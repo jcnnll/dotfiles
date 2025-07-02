@@ -8,7 +8,8 @@
     "php-stubs/wordpress-seo-stubs": "^20.5",
     "php-stubs/woocommerce-stubs": "^9.9",
     "php-stubs/acf-pro-stubs": "^6.4",
-    "php-stubs/wp-cli-stubs": "^2.12"
+    "php-stubs/wp-cli-stubs": "^2.12",
+    "wpsyntex/polylang-stubs": "^3.6"
   },
   "config": {
     "allow-plugins": {

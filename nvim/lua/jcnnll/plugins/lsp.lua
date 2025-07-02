@@ -1,66 +1,30 @@
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
-        -- Automatically install LSPs and related tools to stdpath for Neovim
         { "mason-org/mason.nvim", opts = {} },
         "mason-org/mason-lspconfig.nvim",
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-
-        -- Useful status updates for LSP.
         { "j-hui/fidget.nvim", opts = {} },
-
-        -- Allows extra capabilities provided by blink.cmp
         "saghen/blink.cmp",
     },
     config = function()
         --  This function gets run when an LSP attaches to a particular buffer.
         vim.api.nvim_create_autocmd("LspAttach", {
-            group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+            group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
             callback = function(event)
                 local map = function(keys, func, desc, mode)
                     mode = mode or "n"
                     vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
                 end
-
-                -- Rename the variable under your cursor.
                 map("rn", vim.lsp.buf.rename, "[R]e[n]ame")
-
-                -- Execute a code action, usually your cursor needs to be on top of an error
                 map("ca", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-
-                -- Find references for the word under your cursor.
                 map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-
-                -- Jump to the implementation of the word under your cursor.
                 map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-
-                -- Jump to the definition of the word under your cursor.
                 map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-
-                -- Goto Declaration.
                 map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-                -- Fuzzy find all the symbols in your current document.
                 map("gs", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-
-                -- Fuzzy find all the symbols in your current workspace.
                 map("gS", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
-
-                -- Jump to the type of the word under your cursor.
                 map("gt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
-
-                -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-                ---@param client vim.lsp.Client
-                ---@param method vim.lsp.protocol.Method
-                ---@param bufnr? integer some lsp support methods only in specific files
-                ---@return boolean
-                local function client_supports_method(client, method, bufnr)
-                    if vim.fn.has("nvim-0.11") == 1 then
-                        return client:supports_method(method, bufnr)
-                    else
-                        return client.supports_method(method, { bufnr = bufnr })
-                    end
-                end
             end,
         })
 
@@ -340,19 +304,11 @@ return {
         })
         require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-        require("mason-lspconfig").setup({
-            ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-            automatic_installation = false,
-            handlers = {
-                function(server_name)
-                    local server = servers[server_name] or {}
-                    -- This handles overriding only values explicitly passed
-                    -- by the server configuration above. Useful when disabling
-                    -- certain features of an LSP (for example, turning off formatting for ts_ls)
-                    server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                    require("lspconfig")[server_name].setup(server)
-                end,
-            },
-        })
+        local lspconfig = require("lspconfig")
+
+        for server_name, config in pairs(servers) do
+            config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
+            lspconfig[server_name].setup(config)
+        end
     end,
 }
