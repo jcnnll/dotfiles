@@ -31,3 +31,6 @@ ln -sf $DOTFILES/scripts/wpdestroy $HOME/.local/bin/wpdestroy
 ln -sf $DOTFILES/scripts/setsecret $HOME/.local/bin/setsecret
 ln -sf $DOTFILES/scripts/getsecret $HOME/.local/bin/getsecret
 
+# .env symlink
+ln -sf $DOTFILES/.env $HOME/.dotfiles-env
+

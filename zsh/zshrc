@@ -19,6 +19,8 @@ export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 export HERD_PHP_83_INI_SCAN_DIR="/Users/jay/Library/Application Support/Herd/config/php/83/"
 
+export DOCKER_HOST=unix:///Users/jay/.lima/docker/sock/docker.sock
+
 #-----------------------------------------------------
 # Shell
 #-----------------------------------------------------

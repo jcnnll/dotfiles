@@ -1,7 +1,11 @@
 #!/bin/sh
 # vim: filetype=sh
 
-SITES_PATH="$HOME/workspace/wp-sites"
+export DOCKER_HOST=unix:///Users/jay/.lima/docker/sock/docker.sock
+
+set -e
+
+PROJECTS_PATH="$HOME/workspace/github.com"
 
 # -------- Colors --------
 RED=$(tput setaf 1)
@@ -9,33 +13,42 @@ GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
 NONE=$(tput sgr0)
 
-destroy_site() {
-  local site="$1"
-  cd "$SITES_PATH" || exit 1
-  /opt/homebrew/opt/php@8.0/bin/php "$(which wp)" valet destroy "$site"
+destroy_project() {
+  local project="$1"
+  echo "${YELLOW}Destroying project '${project}'...${NONE}"
+
+  cd "$PROJECTS_PATH/$project" || {
+    echo "${RED}Error:${NONE} Cannot find project directory '$PROJECTS_PATH/$project'"
+    exit 1
+  }
+
+  ddev delete --omit-snapshot
+  cd ..
+  rm -rf "$project"
+
+  echo "${GREEN}✔ Project '${project}' destroyed.${NONE}"
 }
 
+# Determine project name
 if [ -n "$1" ]; then
-  SITE="$1"
+  PROJECT="$1"
 else
   # No argument passed — detect site from current path
   CWD="$(pwd)"
-  ABS_SITES_PATH="$(realpath "$SITES_PATH")"
+  ABS_PROJECTS_PATH="$(realpath "$PROJECTS_PATH")"
   ABS_CWD="$(realpath "$CWD")"
   PARENT_DIR="$(dirname "$ABS_CWD")"
 
-  if [ "$PARENT_DIR" = "$ABS_SITES_PATH" ]; then
-    SITE="$(basename "$ABS_CWD")"
-    cd "$ABS_SITES_PATH" || exit 1
+  if [ "$PARENT_DIR" = "$ABS_PROJECTS_PATH" ]; then
+    PROJECT="$(basename "$ABS_CWD")"
   else
-    echo "${RED}Error:${NONE} No site name provided."
-    echo "${RED}Error:${NONE} Not inside a valid wp-sites/SITENAME directory."
+    echo "${RED}Error:${NONE} No project name provided."
+    echo "${RED}Error:${NONE} Not inside a valid project directory."
     echo "Usage:"
-    echo "  wpdestroy <sitename>"
-    echo "  (or run inside ~/workspace/wp-sites/SITENAME with no argument)"
+    echo "  wpdestroy <project>"
+    echo "  (or run inside ~/workspace/github.com/<project> with no argument)"
     exit 1
   fi
 fi
 
-destroy_site "$SITE"
-echo "${GREEN}✔ Site '${SITE}' destroyed.${NONE}"
+destroy_project "$PROJECT"
