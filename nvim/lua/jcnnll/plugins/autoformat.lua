@@ -12,7 +12,7 @@ return {
                 require("conform").format({
                     lsp_fallback = true,
                     async = false,
-                    timeout_ms = 1000,
+                    timeout_ms = 600,
                 })
             end,
             desc = "[F]ormat buffer",
@@ -20,12 +20,6 @@ return {
     },
     config = function()
         require("conform").setup({
-            formatters = {
-                phpcbf = {
-                    command = "/Users/jay/.composer/vendor/bin/phpcbf",
-                    args = { "--standard=WordPress", "$FILENAME" },
-                },
-            },
             formatters_by_ft = {
 
                 css = { "prettier" },
@@ -38,7 +32,7 @@ return {
                 liquid = { "prettier" },
                 lua = { "stylua" },
                 markdown = { "prettier" },
-                php = { "phpcbf" },
+                php = { "pint", "phpcbf" },
                 python = { "isort", "black" },
                 typescript = { "prettier" },
                 typescriptreact = { "prettier" },
@@ -47,7 +41,7 @@ return {
             format_on_save = {
                 lsp_fallback = true,
                 async = false,
-                timeout_ms = 1000,
+                timeout_ms = 600,
             },
         })
     end,

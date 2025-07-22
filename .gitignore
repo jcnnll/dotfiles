@@ -1,3 +1,4 @@
 nvim/spell/
 tmux/plugins/
 .env
+.DS_STORE
