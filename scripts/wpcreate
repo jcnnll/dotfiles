@@ -1,6 +1,24 @@
 #!/bin/sh
 # vim: filetype=sh
 
+# -------- Colors --------
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+NONE=$(tput sgr0)
+
+# -------- Preflight Checks --------
+for cmd in php composer curl ddev wp; do
+    if ! command -v $cmd >/dev/null; then
+        echo "${RED}Required command '$cmd' not found. Please install it before continuing.${NONE}"
+        exit 1
+    fi
+done
+
+if ! command -v limactl >/dev/null; then
+    echo "${RED}'limactl' not found. Lima is required for Docker on macOS without Docker Desktop.${NOME}"
+    exit 1
+fi
+
 export DOCKER_HOST=unix:///Users/jay/.lima/docker/sock/docker.sock
 
 set -e
@@ -10,12 +28,12 @@ LIMA_PROFILE="docker"
 LIMA_DOCKER_SOCKET="$HOME/.lima/${LIMA_PROFILE}/sock/docker.sock"
 
 if ! docker info >/dev/null 2>&1; then
-    echo "Docker not responding. Attempting to use Lima profile: $LIMA_PROFILE"
+    echo "${YELLOW}Docker not responding. Attempting to use Lima profile: $LIMA_PROFILE${NONE}"
 
     if ! limactl list | grep -q "^$LIMA_PROFILE.*Running"; then
         echo "Starting Lima profile: $LIMA_PROFILE"
         limactl start "$LIMA_PROFILE" || {
-            echo "Failed to start Lima profile '$LIMA_PROFILE'."
+            echo "${RED}Failed to start Lima profile '$LIMA_PROFILE'.${NONE}"
                 exit 1
             }
         sleep 2
@@ -23,24 +41,19 @@ if ! docker info >/dev/null 2>&1; then
 
     if [ -S "$LIMA_DOCKER_SOCKET" ]; then
         export DOCKER_HOST="unix://$LIMA_DOCKER_SOCKET"
-        echo "Using Lima Docker socket: $DOCKER_HOST"
+        echo "${YELLOW}Using Lima Docker socket: $DOCKER_HOST${NONE}"
 
         if ! docker info >/dev/null 2>&1; then
-            echo "Docker still not responding after setting DOCKER_HOST."
+            echo "${RED}Docker still not responding after setting DOCKER_HOST.${NONE}"
             exit 1
         fi
     else
-        echo "Lima Docker socket not found: $LIMA_DOCKER_SOCKET"
+        echo "${RED}Lima Docker socket not found: $LIMA_DOCKER_SOCKET${NONE}"
         exit 1
     fi
 fi
 
-PROJECTS_PATH="$HOME/workspace/github.com"
-
-# -------- Colors --------
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-NONE=$(tput sgr0)
+PROJECTS_PATH="$HOME/sites"
 
 # -------- Functions --------
 
@@ -130,7 +143,7 @@ create_project() {
 # -------- Main --------
 
 if [ -z "$1" ]; then
-    echo "Usage: wpcreate <project-name>"
+    echo "${RED}Usage: wpcreate <project-name>.${NONE}"
     exit 1
 fi
 

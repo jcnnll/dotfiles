@@ -35,7 +35,7 @@ if ! docker info >/dev/null 2>&1; then
     fi
 fi
 
-PROJECTS_PATH="$HOME/workspace/github.com"
+PROJECTS_PATH="$HOME/sites"
 
 # -------- Colors --------
 GREEN=$(tput setaf 2)

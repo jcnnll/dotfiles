@@ -26,7 +26,7 @@ return {
     priority = 1000,
     config = function()
         require("rose-pine").setup({
-            varient = "moon",
+            varient = "dawn",
             styles = {
                 transparency = true,
             },

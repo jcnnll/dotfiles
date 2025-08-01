@@ -5,7 +5,7 @@ export DOCKER_HOST=unix:///Users/jay/.lima/docker/sock/docker.sock
 
 set -e
 
-PROJECTS_PATH="$HOME/workspace/github.com"
+PROJECTS_PATH="$HOME/sites"
 
 # -------- Colors --------
 RED=$(tput setaf 1)
