@@ -1,25 +1,119 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # vim: filetype=sh
 
-# Credit to ThePrimeagen
+### ========================
+### CONFIGURATION
+### ========================
+SESSION_PATHS=(
+    "/Users/jay/workspace/github.com"
+    "/Users/jay/sites"
+)
+EDITOR_CMD="nvim"  # Editor command
 
-if [[ $# -eq 1 ]]; then
-  selected=$1
-else
-  items=$(find ~/personal ~/workspace/github.com -maxdepth 1 -mindepth 1 -type d)
-  items+=`echo "\n$HOME/dotfiles"`
-  selected=$(echo "$items" | fzf)
-fi
+### ========================
+### FUNCTIONS
+### ========================
 
-if [[ $selected == '' ]]; then
-  exit
-fi
+is_valid_dir() {
+    [[ -d "$1" ]]
+}
 
-dirname=$(basename "$selected" | sed 's/\./_/g')
+print_help() {
+    cat <<EOF
+Usage:
+____________________________________________________________
+t                Launch fzf to pick a session path
+t PATH           Launch a tmux session for the given path
+t help           Show this help message
+____________________________________________________________
+EOF
+}
 
-tmux switch-client -t ="$dirname"
-if [[ $? -eq 0 ]]; then
-  exit 0
-fi
+select_project() {
+    local dirs=()
+    for base in "${SESSION_PATHS[@]}"; do
+        if [[ -d "$base" ]]; then
+            while IFS= read -r dir; do
+                dirs+=("$dir")
+            done < <(find "$base" -mindepth 1 -maxdepth 1 -type d ! -name ".*" 2>/dev/null)
+        fi
+    done
+    printf "%s\n" "${dirs[@]}" | fzf --prompt="Select project: "
+}
 
-tmux new-session -c "$selected" -d -s "$dirname" && tmux switch-client -t "$dirname" || tmux new -c "$selected" -A -s "$dirname"
+select_wp_subdir() {
+    local base="$1"
+    local wp_dirs
+    wp_dirs=$(find "$base"/web/app/{mu-plugins,plugins,themes} -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+
+    if [[ -n "$wp_dirs" ]]; then
+        printf "%s\n" "$wp_dirs" | fzf --prompt="Select plugin/theme: "
+    else
+        echo "$base"
+    fi
+}
+
+launch_tmux() {
+    local project_path="$1"
+    local session_name
+    session_name="$(basename "$project_path" | sed 's/\./_/g')"
+
+    # Check if session exists
+    tmux has-session -t "$session_name" 2>/dev/null
+    if [[ $? -ne 0 ]]; then
+        # Create session with editor window
+        tmux new-session -ds "$session_name" -c "$project_path" -n editor "sh -c '$EDITOR_CMD; exec \$SHELL'"
+        # Add terminal window
+        tmux new-window -t "$session_name" -c "$project_path" -n terminal
+        # Focus editor window and set titles
+        tmux select-window -t "$session_name:editor"
+        tmux set-option -t "$session_name" set-titles on
+        tmux set-option -t "$session_name" set-titles-string "#W"
+    fi
+
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$session_name"
+    else
+        tmux attach-session -t "$session_name"
+    fi
+}
+
+launch_interactive() {
+    local selected
+    selected=$(select_project)
+    [[ -z "$selected" ]] && exit 0
+
+    # If from ~/sites, check for plugin/theme selection
+    if [[ "$selected" == /Users/jay/sites/* ]]; then
+        local sub_selected
+        sub_selected=$(select_wp_subdir "$selected")
+        [[ -n "$sub_selected" ]] && selected="$sub_selected"
+    fi
+
+    launch_tmux "$selected"
+}
+
+### ========================
+### MAIN LOGIC
+### ========================
+case "$1" in
+    "")
+        launch_interactive
+        ;;
+    help)
+        print_help
+        ;;
+    *)
+        if is_valid_dir "$1"; then
+            # If explicit path is in ~/sites, maybe go deeper
+            if [[ "$1" == /Users/jay/sites/* ]]; then
+                deeper=$(select_wp_subdir "$1")
+                [[ -n "$deeper" ]] && set -- "$deeper"
+            fi
+            launch_tmux "$1"
+        else
+            echo "Unknown command or invalid path. Run \`t help\` for usage." >&2
+            exit 1
+        fi
+        ;;
+esac

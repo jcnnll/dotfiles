@@ -1,2 +1,3 @@
-require("jcnnll.core")
-require("jcnnll.lazy")
+require("config.options")
+require("config.lazy")
+require("config.keymaps")
