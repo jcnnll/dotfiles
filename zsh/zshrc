@@ -28,12 +28,7 @@ export DOCKER_HOST=unix:///Users/jay/.lima/docker/sock/docker.sock
 # fzf
 source <(fzf --zsh)
 
-export FZF_DEFAULT_OPTS="
-	--color=fg:#797593,bg:#faf4ed,hl:#d7827e
-	--color=fg+:#575279,bg+:#f2e9e1,hl+:#d7827e
-	--color=border:#dfdad9,header:#286983,gutter:#faf4ed
-	--color=spinner:#ea9d34,info:#56949f
-	--color=pointer:#907aa9,marker:#b4637a,prompt:#797593"
+export FZF_DEFAULT_OPTS="--color=bg+:#3b4261,bg:#24283b,fg:#c0caf5,fg+:#c0caf5,hl:#7aa2f7,hl+:#7dc4e4,info:#a9b1d6,marker:#bb9af7,pointer:#bb9af7,prompt:#bb9af7,query:#7dc4e4,separator:#1a1b26,spinner:#7dc4e4"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
