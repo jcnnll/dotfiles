@@ -15,37 +15,18 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export PATH="$HOME/go/bin:$PATH"
 
-export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-export HERD_PHP_83_INI_SCAN_DIR="/Users/jay/Library/Application Support/Herd/config/php/83/"
-
-export DOCKER_HOST=unix:///Users/jay/.lima/docker/sock/docker.sock
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 #-----------------------------------------------------
 # Shell
 #-----------------------------------------------------
 
-# fzf
 source <(fzf --zsh)
 
 export FZF_DEFAULT_OPTS="--color=bg+:#3b4261,bg:#24283b,fg:#c0caf5,fg+:#c0caf5,hl:#7aa2f7,hl+:#7dc4e4,info:#a9b1d6,marker:#bb9af7,pointer:#bb9af7,prompt:#bb9af7,query:#7dc4e4,separator:#1a1b26,spinner:#7dc4e4"
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-# Cargo
-. "$HOME/.cargo/env"
-
-
-# Generated for envman. Do not edit.
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
-
-
-export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-
-# Enable vim keybindings
 bindkey -v
 
 # starship

@@ -1,8 +1,0 @@
-#!/bin/sh
-# vim: filetype=sh
-
-BASE=$(find ~/sites -mindepth 1 -maxdepth 1 -type d | fzf --prompt="Select project: ") || exit
-
-TARGET=$(find "$BASE"/web/app/{mu-plugins,plugins,themes} -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf --prompt="Select plugin/theme: ") || exit
-
-code "$TARGET"
