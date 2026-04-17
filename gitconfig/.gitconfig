@@ -1,0 +1,7 @@
+[user]
+	name = jcnnll
+	email = 201615143+jcnnll@users.noreply.github.com
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
