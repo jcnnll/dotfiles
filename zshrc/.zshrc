@@ -14,6 +14,9 @@ bindkey '^L' vi-forward-word
 bindkey '^k' up-line-or-search
 bindkey '^j' down-line-or-search
 
+unset VIRTUAL_ENV
+unset PYENV_VERSION
+
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
 
@@ -59,6 +62,8 @@ alias ......="cd ../../../../.."
 # GO
 export GOPATH='/Users/jcnnll/go'
 
+[[ ":$PATH:" != *":/Users/jcnnll/go/bin:"* ]] && export PATH="$PATH:/Users/jcnnll/go/bin"
+
 # VIM
 alias v="nvim"
 
@@ -98,26 +103,19 @@ alias ltree="eza --tree --level=2  --icons --git"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH=/opt/homebrew/bin:$PATH
+[[ ":$PATH:" != *":/opt/homebrew/bin:"* ]] && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
+export XDG_CONFIG_HOME="/Users/jcnnll/.config"
+eval "$(zoxide init zsh)"
+
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 # navigation
 cx() { cd "$@" && l; }
 fcd() { cd "$(find . -type d -not -path '*/.*' | fzf)" && l; }
 f() { echo "$(find . -type f -not -path '*/.*' | fzf)" | pbcopy }
 fv() { nvim "$(find . -type f -not -path '*/.*' | fzf)" }
-
-export XDG_CONFIG_HOME="/Users/jcnnll/.config"
-
-eval "$(zoxide init zsh)"
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
-
-# for the kids who still use pip in their scripts:
-alias pip="pip3"
-alias python="python3"
-
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
