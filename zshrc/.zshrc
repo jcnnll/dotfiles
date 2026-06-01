@@ -67,41 +67,19 @@ export GOPATH='/Users/jcnnll/go'
 # VIM
 alias v="nvim"
 
-
 alias cl='clear'
-
-# K8S
-export KUBECONFIG=~/.kube/config
-alias k="kubectl"
-alias ka="kubectl apply -f"
-alias kg="kubectl get"
-alias kd="kubectl describe"
-alias kdel="kubectl delete"
-alias kl="kubectl logs"
-alias kgpo="kubectl get pod"
-alias kgd="kubectl get deployments"
-alias kc="kubectx"
-alias kns="kubens"
-alias kl="kubectl logs -f"
-alias ke="kubectl exec -it"
-alias kcns='kubectl config set-context --current --namespace'
-alias podname=''
-
-# HTTP requests with xh!
-alias http="xh"
 
 # VI Mode!!!
 bindkey jj vi-cmd-mode
 
-# Eza
-alias l="eza -l --icons --git -a"
-alias lt="eza --tree --level=2 --long --icons --git"
-alias ltree="eza --tree --level=2  --icons --git"
-
 
 ### FZF ###
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS="
+	--color=fg:#797593,bg:#faf4ed,hl:#d7827e
+	--color=fg+:#575279,bg+:#f2e9e1,hl+:#d7827e
+	--color=border:#dfdad9,header:#286983,gutter:#faf4ed
+	--color=spinner:#ea9d34,info:#56949f
+	--color=pointer:#907aa9,marker:#b4637a,prompt:#797593"
 
 [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]] && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
@@ -119,3 +97,15 @@ cx() { cd "$@" && l; }
 fcd() { cd "$(find . -type d -not -path '*/.*' | fzf)" && l; }
 f() { echo "$(find . -type f -not -path '*/.*' | fzf)" | pbcopy }
 fv() { nvim "$(find . -type f -not -path '*/.*' | fzf)" }
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/jcnnll/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/jcnnll/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+export PATH="$HOME/.local/bin:$PATH"
+

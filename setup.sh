@@ -1,5 +1,8 @@
 #!/bin/bash
 
 echo "Stowing configs"
-stow -t ~/ .
+stow nvim
+stow tmux
+stow ghostty
+stow zshrc
 echo "Done!"
